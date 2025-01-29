@@ -1,0 +1,10 @@
+FROM linearparadox/cellbender
+WORKDIR ~/cellranger
+RUN rm check_shutdown.sh && rm entrypoint.sh && \
+    conda init bash && \
+    conda activate cellbender && \
+    yes | pip install sctk
+COPY entrypoint.sh ./
+RUN chmod 777 entrypoint.sh
+ENTRYPOINT ["conda", "run", "--no-capture-output", "-n", "cellbender", "./entrypoint.sh"]
+
