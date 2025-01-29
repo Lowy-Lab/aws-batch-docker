@@ -1,0 +1,11 @@
+FROM rocker/tidyverse:latest
+COPY install.R .
+RUN apt-get update && apt-get install -y build-essential libhdf5-dev libglpk-dev libxml2-dev  && Rscript install.R
+RUN  apt-get install -y curl unzip && curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
+apt-get install -y unzip && \
+unzip awscliv2.zip && \
+./aws/install
+WORKDIR cellranger
+COPY scdblfinder.R entrypoint.sh ./
+RUN chmod 777 entrypoint.sh
+ENTRYPOINT [ "./entrypoint.sh" ]
